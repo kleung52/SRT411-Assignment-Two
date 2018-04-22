@@ -1,0 +1,72 @@
+---
+title: "Assignment 2 Data Analysis at Home and on the Web"
+author: "KinOn Leung (057443046)"
+date: 'April 21st 2018'
+output:
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
+  word_document:
+    toc: yes
+  html_document:
+    fig_caption: yes
+    keep_md: yes
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+setwd("C:/Users/USER/Desktop/harbinger-master")
+csvMalDom <- read.csv("malware_domains.csv")
+csvMalIP <- read.csv("ips_report.csv")
+threatPre <- read.csv("threat prevention programs.csv")
+
+library(Hmisc)
+library(sqldf)
+library(dplyr)
+library(lattice)
+library(stringr)
+library(rjson)
+library(jsonlite)
+library(dataMeta)
+library(RJSONIO)
+library(sqldf)
+
+```
+
+## Summary and Description (Threat Detection Programs)
+```{r}
+
+MalIP <- csvMalIP[,colSums(is.na(csvMalIP)) < nrow(csvMalIP)]
+
+summary(MalIP)
+describe(MalIP)
+
+colnames(csvMalIP)
+colnames(MalIP)
+
+plot(MalIP$cymon_record_created, xlab="Approximate Date and Time", ylab="Frequency", main="Record Created Date and Time from Cymon")
+plot(MalIP$cymon_last_updated, xlab="Approximate Date and Time", ylab="Frequency", main="Last Updated Date and Time from Cymon")
+
+plot(MalIP$cymon_blacklists____001, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 1")
+plot(MalIP$cymon_blacklists____002, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 2")
+plot(MalIP$cymon_blacklists____003, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 3")
+plot(MalIP$cymon_blacklists____004, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 4")
+plot(MalIP$cymon_blacklists____005, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 5")
+plot(MalIP$cymon_blacklists____006, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 6")
+plot(MalIP$cymon_blacklists____007, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 7")
+plot(MalIP$cymon_blacklists____008, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 8")
+plot(MalIP$cymon_blacklists____009, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 9")
+plot(MalIP$cymon_blacklists____010, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 10")
+plot(MalIP$cymon_blacklists____011, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 11")
+plot(MalIP$cymon_blacklists____012, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 12")
+plot(MalIP$cymon_blacklists____013, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 13")
+plot(MalIP$cymon_blacklists____014, las=1, xlab="Threat Detection Programs", ylab="Frequency", main="Count of Threat Detections for Cymon Blacklist 14")
+
+```

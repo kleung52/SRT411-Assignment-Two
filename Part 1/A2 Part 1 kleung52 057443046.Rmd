@@ -1,0 +1,146 @@
+---
+title: "Assignment 2 Data Analysis at Home and on the Web"
+author: "KinOn Leung (057443046)"
+date: 'April 21st 2018'
+output:
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
+  word_document:
+    toc: yes
+  html_document:
+    fig_caption: yes
+    keep_md: yes
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+setwd("C:/Users/kleung52/Desktop/SRT411 Assignment 2")
+hostdet <- read.csv("host_detections.csv")
+maldet <- read.csv("mal_domains.csv")
+threatpre <- read.csv("threat prevention programs.csv")
+antiMal <- read.csv("anti-malware programs.csv")
+library(Hmisc)
+library(sqldf)
+library(dplyr)
+library(lattice)
+library(stringr)
+library(rjson)
+library(jsonlite)
+library(dataMeta)
+library(sqldf)
+
+```
+
+## Summary and Description (Malware Hosts Detection)
+```{r}
+
+hostdet1 <- subset(hostdet, hostdet$listOfDetections!="0")  # removes values 0
+hostdet2 <- subset(hostdet1, hostdet1$listOfDetections!="[]")   # removes values []
+hostdet3 <- subset(hostdet2, hostdet2$listOfDetections!="[None]")   # removes values [None]
+elihostdet <- subset(hostdet3, hostdet3$listOfDetections!="[None, None]")   # removes values [None, None]
+elihostdet <- distinct(elihostdet)  # no repeats of rows
+
+summary(elihostdet)
+describe(elihostdet)
+
+dete <- vector()
+det <- vector()
+for (detect in levels(elihostdet$listOfDetections)) # extract all strings in listOfDetections
+  {
+      dete <- c(dete, detect) # store into an array of all strings in listOfDetections
+  }
+for (i in 1:length(dete)) # loops through an array of strings
+  {
+      det <- c(det, str_extract(dete[i], "u\'(.*)\'"))  # eliminates square brackets 
+  }
+det <- unique(det)  # no repeats of rows
+
+countMalw <- vector()
+for (disthreat in threatpre$threatPrevention) # loops through each distinct entry
+  {
+    hostsMalw <- (elihostdet %>% filter(str_detect(listOfDetections, disthreat))) # extract all rows with string of distinct entry
+    countMalw <- c(countMalw, nrow(hostsMalw))  # count number of rows
+  }
+threatpre["count_Malware"] <- NA
+threatpre$count_Malware <- countMalw
+threatpre$X <- NULL
+threatpre <- threatpre[order(-threatpre$count_Malware),]
+write.csv(threatpre, file="threat prevention programs.csv")
+threatpre
+
+mostThreatPre <- sqldf("select * from elihostdet where count = 13")
+mostThreatPre
+
+```
+
+## Summary and Description (Malware Domains Detection)
+```{r}
+
+maldet <- distinct(maldet)
+summary(maldet)
+describe(maldet)
+head(maldet[order(-maldet$count),], n=3)
+
+countMalwDom <- vector()
+for (disMalDom in antiMal$antiMalware) # loops through each distinct entry
+  {
+    domainMalw <- (maldet %>% filter(str_detect(anti.malware, disMalDom))) # extract all rows with string of distinct entry
+    countMalwDom <- c(countMalwDom, nrow(domainMalw))  # count number of rows
+  }
+antiMal["count_Domain"] <- NA
+antiMal$count_Domain <- countMalwDom
+antiMal$X <- NULL
+antiMal <- antiMal[order(-antiMal$count_Domain),]
+write.csv(antiMal, file="anti-malware programs.csv")
+antiMal
+
+for (matchPro in antiMal$antiMalware) # loops through each distinct entry
+  {
+  for (matchProg in threatpre$threatPrevention) # loops through each distinct entry in another table
+    {
+      if(length(grep(matchPro, matchProg)) == 0) 
+        {
+        }
+      else 
+        {
+          print(matchPro)
+        }
+    }
+  }
+
+# below is code to find matching malware hosts detection and malware domains detection
+# for (matchMal in maldet$domains) # loops through each distinct entry
+#   {
+#   for (matchMalw in elihostdet$host)
+#     {
+#       if(length(grep(matchMal, matchMalw)) == 0) 
+#         {
+#         }
+#       else 
+#         {
+#           print(matchMal)
+#         }
+#     }
+#   }
+
+plot(x=threatpre$threatPrevention, y=threatpre$count_Malware, las=1, xlab="Threat Prevention Programs", ylab="Count of Malware Hosts Detection", main="Count of Malware for Each Program")
+plot(x=antiMal$antiMalware, y=antiMal$count_Domain, las=1, xlab="Anti-Malware Programs", ylab="Count of Malware Domains Detection", main="Count of Malware for Each Program")
+
+```
+
+
+```{r, echo=FALSE}
+time <- format(Sys.time(), "%a %b %d %X %Y")
+```
+
+The current time is `r time`.
+
+THE END

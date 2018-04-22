@@ -1,0 +1,27 @@
+"","threatPrevention","count_Malware"
+"1","u'BitDefender'",824
+"2","u'MyWOT'",532
+"3","u'GoogleSafeBrowsing'",336
+"4","u'SCUMWARE'",322
+"5","u'SURBL'",230
+"6","u'AVGThreatLabs'",169
+"7","u'BrowserDefender'",134
+"8","u'SpamhausDBL'",132
+"9","u'DrWeb'",106
+"10","u'DNS-BH'",99
+"11","u'DShield'",66
+"12","u'hpHosts'",50
+"13","u'MalwareDomainList'",43
+"14","u'Avira'",30
+"15","u'Sucuri'",29
+"16","u'ThreatLog'",20
+"17","u'YandexSafeBrowsing'",18
+"18","u'CRDF'",15
+"19","u'MalwarePatrol'",14
+"20","u'urlQuery'",11
+"21","u'Quttera'",7
+"22","u'z_protect'",6
+"23","u'Fortinet'",3
+"24","u'ZeuS Tracker'",3
+"25","u'Malc0de'",2
+"26","u'PhishTank'",1
